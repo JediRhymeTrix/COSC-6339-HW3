@@ -1,7 +1,6 @@
 pandas
 numpy
-nltk
+seaborn
 sklearn
-gensim
 tensorflow
 transformers
