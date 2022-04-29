@@ -9,7 +9,7 @@ Vohra, Vedant 2889
 
 ## Dataset
 
-`amazon_reviews_grocery.tsv`
+`amazon_reviews_grocery.tsv` / `amazon_reviews_grocery_100k.tsv`
 
 ## Approach
 
@@ -43,7 +43,7 @@ pip3 install -r requirements.txt
 spark-submit preprocess.py <absolute_file_path>
 ```
 
-  (`absolute_file_path` path here can be a hdfs path)
+  (`absolute_file_path` path here can be a hdfs path like: `"hdfs://10.0.1.111:9000/amazon_reviews_grocery_100k.tsv"`)
 
 3. Train models (optional, as trained models are already present in `models/`. Skip to next step)
 
