@@ -1,3 +1,5 @@
+pyspark
+nltk
 pandas
 numpy
 seaborn

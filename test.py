@@ -29,12 +29,24 @@ print(df_test.head())
 # get X
 X_test = df_test['text'].values
 
+# get other numerical and categorical features
+feat_test = df_test.drop(['text', 'y'], axis=1).values
+
 # get target
 y_test = df_test["y"].values
 
+# preparing sequences from test data
+tokenizer = Tokenizer()
+tokenizer.fit_on_texts(X_test)
+
+X_test_indices = tokenizer.texts_to_sequences(X_test)
+
+# padding sequences to uniform length
+X_test_indices = pad_sequences(X_test_indices, maxlen=MAX_LEN)
+
 '''
 
-Load saved model
+Load saved model (text-only)
 
 '''
 
@@ -51,15 +63,6 @@ Evaluation
 
 '''
 
-# preparing sequences from test data
-tokenizer = Tokenizer()
-tokenizer.fit_on_texts(X_test)
-
-X_test_indices = tokenizer.texts_to_sequences(X_test)
-
-# padding sequences to uniform length
-X_test_indices = pad_sequences(X_test_indices, maxlen=MAX_LEN)
-
 # evaluate
 scores = model.evaluate(X_test_indices, y_test)
 
@@ -70,6 +73,44 @@ predictions = list(map(lambda x: 1 if x > 0.5 else 0, predictions))
 # confusion matrix
 conf_matrix = confusion_matrix(y_test, predictions)
 print('\n-----------------------------------\n')
+print('Model: text-only')
 print('Accuracy: %.2f%%\n' % (scores[1]*100))
 print('Confusion matrix: ')
 print(conf_matrix)
+print('\n-----------------------------------\n')
+
+'''
+
+Load saved model (text + additional features)
+
+'''
+
+bst_model_path = MODEL_PATH + 'bid_lstm_feats.h5'
+
+# load model
+model = models.load_model(bst_model_path)
+
+model.summary()
+
+'''
+
+Evaluation
+
+'''
+
+# evaluate
+scores = model.evaluate([X_test_indices, feat_test], y_test)
+
+# test
+predictions = model.predict([X_test_indices, feat_test])
+predictions = list(map(lambda x: 1 if x > 0.5 else 0, predictions))
+
+# confusion matrix
+conf_matrix = confusion_matrix(y_test, predictions)
+print('\n-----------------------------------\n')
+print('Model: text-only')
+print('Accuracy: %.2f%%\n' % (scores[1]*100))
+print('Confusion matrix: ')
+print(conf_matrix)
+print('\n-----------------------------------\n')
+

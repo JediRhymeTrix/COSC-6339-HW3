@@ -15,11 +15,15 @@ Vohra, Vedant 2889
 
 ### Preprocessing (using PySpark)
 
-Column filtering, text cleaning, stop-word removal, lemmatization, tokenization, converting to vectors and creating word embeddings
+Column filtering, mapping categorical values to numerical, text cleaning, stop-word removal, lemmatization, tokenization, converting to vectors and creating word embeddings
 
-### Model
+### Models
 
-Bi-directional LSTM w/ Attention
+**Bi-directional LSTM w/ Attention**
+
+1. A model that only uses the review text as input
+2. A model that uses the review text as well as some of the other numerical/categorical features as input (`helpful_votes, total_votes, vine, verified_purchase`) \
+    -> The additional features are added as a second Input layer which is concatenated with the output from the LSTM, just before the Dense layers.
 
 ### Evaluation
 
@@ -36,16 +40,18 @@ pip3 install -r requirements.txt
 2. Run pyspark pre-processing job to generate datasets + embeddings for training and testing (stored in `data/`)
 
 ```bash
-python3 preprocess.py
+spark-submit preprocess.py <absolute_file_path>
 ```
 
-3. Train model (optional, as trained model is already present in `models/`. Skip to next step)
+  (`absolute_file_path` path here can be a hdfs path)
+
+3. Train models (optional, as trained models are already present in `models/`. Skip to next step)
 
 ```bash
 python3 train.py
 ```
 
-4. Evaluate model
+4. Evaluate models
 
 ```bash
 python3 test.py
