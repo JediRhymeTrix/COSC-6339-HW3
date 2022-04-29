@@ -37,7 +37,13 @@ Accuracy metric + confusion matrix. Compared with fine-tuned BERT model (Refer [
 pip3 install -r requirements.txt
 ```
 
-2. Run pyspark pre-processing job to generate datasets + embeddings for training and testing (stored in `data/`)
+2. Install nltk data
+
+```bash
+python3 -m nltk.downloader stopwords wordnet omw-1.4
+```
+
+3. Run pyspark pre-processing job to generate datasets + embeddings for training and testing (stored in `data/`)
 
 ```bash
 spark-submit preprocess.py <absolute_file_path>
@@ -45,13 +51,13 @@ spark-submit preprocess.py <absolute_file_path>
 
   (`absolute_file_path` path here can be a hdfs path like: `"hdfs://10.0.1.111:9000/amazon_reviews_grocery_100k.tsv"`)
 
-3. Train models (optional, as trained models are already present in `models/`. Skip to next step)
+4. Train models (optional, as trained models are already present in `models/`. Skip to next step)
 
 ```bash
 python3 train.py
 ```
 
-4. Evaluate models
+5. Evaluate models
 
 ```bash
 python3 test.py
